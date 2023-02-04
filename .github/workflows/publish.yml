@@ -20,10 +20,6 @@ jobs:
             target: x86_64-unknown-linux-musl
             use-cross: false
 
-          - os: 
-            target: 
-            use-cross: false
-
           - os: macos-latest
             target: x86_64-apple-darwin
             use-cross: false
@@ -87,21 +83,21 @@ jobs:
         with:
           toolchain: stable
           profile: minimal
-          override: true
-          target: aarch64-unknown-linux-gnu
+          override: false
+          target: x86_64-pc-windows-msvc
       
       - name: Build
         uses: actions-rs/cargo@v1
         with:
           use-cross: ${{ matrix.use-cross }}
           command: build
-          args: --target ${{ matrix.target }} --release --locked
+          args: --release --locked
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v1-release
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/${{ matrix.target }}/release/sd.exe
+          file: target/release/sd.exe
           asset_name: sd-${{ steps.version.outputs.VERSION }}-${{ matrix.target }}
           tag: ${{ github.ref }}
     
@@ -145,14 +141,12 @@ jobs:
             chmod -R 777 /build
             source "$HOME/.cargo/env"
             cargo build --release --locked
-      - name: Strip binary
-        run: strip target/${{ matrix.target }}/release/sd
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v1-release
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/${{ matrix.target }}/release/sd
+          file: target/release/sd
           asset_name: sd-${{ steps.version.outputs.VERSION }}-${{ matrix.target }}
           tag: ${{ github.ref }}
 

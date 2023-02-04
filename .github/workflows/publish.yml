@@ -98,7 +98,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: target/release/sd.exe
-          asset_name: sd-${{ steps.version.outputs.VERSION }}-${{ matrix.target }}
+          asset_name: sd-x86_64-pc-windows-msvc }}
           tag: ${{ github.ref }}
     
 
@@ -147,6 +147,6 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: target/release/sd
-          asset_name: sd-${{ steps.version.outputs.VERSION }}-${{ matrix.target }}
+          asset_name: sd-${{ steps.version.outputs.VERSION }}-aarch64-unknown-linux-gnu
           tag: ${{ github.ref }}
 

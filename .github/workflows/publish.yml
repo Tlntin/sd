@@ -91,19 +91,19 @@ jobs:
           target: aarch64-unknown-linux-gnu
       
       - name: Build
-      uses: actions-rs/cargo@v1
-      with:
-        use-cross: ${{ matrix.use-cross }}
-        command: build
-        args: --target ${{ matrix.target }} --release --locked
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: ${{ matrix.use-cross }}
+          command: build
+          args: --target ${{ matrix.target }} --release --locked
 
-    - name: Upload binaries to release
-      uses: svenstaro/upload-release-action@v1-release
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: target/${{ matrix.target }}/release/sd.exe
-        asset_name: sd-${{ steps.version.outputs.VERSION }}-${{ matrix.target }}
-        tag: ${{ github.ref }}
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v1-release
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/${{ matrix.target }}/release/sd.exe
+          asset_name: sd-${{ steps.version.outputs.VERSION }}-${{ matrix.target }}
+          tag: ${{ github.ref }}
     
 
 

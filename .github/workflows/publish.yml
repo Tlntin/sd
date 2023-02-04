@@ -69,7 +69,7 @@ jobs:
         file: target/${{ matrix.target }}/release/sd
         asset_name: sd-${{ steps.version.outputs.VERSION }}-${{ matrix.target }}
         tag: ${{ github.ref }}
-  build-arm64:
+  aarch64-unknown-linux-gnu:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout repository

@@ -105,6 +105,7 @@ jobs:
           run: |
             uname -a
             chmod -R 777 /build
+            source "$HOME/.cargo/env"
             cargo build --release --locked
       - name: Strip binary
         run: strip target/${{ matrix.target }}/release/sd

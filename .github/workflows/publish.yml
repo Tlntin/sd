@@ -70,7 +70,7 @@ jobs:
         asset_name: sd-${{ steps.version.outputs.VERSION }}-${{ matrix.target }}
         tag: ${{ github.ref }}
   build-arm64:
-   runs-on: ubuntu-20.04
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2

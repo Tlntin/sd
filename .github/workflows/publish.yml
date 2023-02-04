@@ -20,8 +20,8 @@ jobs:
             target: x86_64-unknown-linux-musl
             use-cross: false
 
-          - os: windows-latest
-            target: x86_64-pc-windows-msvc
+          - os: 
+            target: 
             use-cross: false
 
           - os: macos-latest
@@ -69,7 +69,45 @@ jobs:
         file: target/${{ matrix.target }}/release/sd
         asset_name: sd-${{ steps.version.outputs.VERSION }}-${{ matrix.target }}
         tag: ${{ github.ref }}
-  aarch64-unknown-linux-gnu:
+  
+  x86_64-pc-windows-msvc:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Set the version
+        id: version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+      
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+          target: aarch64-unknown-linux-gnu
+      
+      - name: Build
+      uses: actions-rs/cargo@v1
+      with:
+        use-cross: ${{ matrix.use-cross }}
+        command: build
+        args: --target ${{ matrix.target }} --release --locked
+
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v1-release
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: target/${{ matrix.target }}/release/sd.exe
+        asset_name: sd-${{ steps.version.outputs.VERSION }}-${{ matrix.target }}
+        tag: ${{ github.ref }}
+    
+
+
+  aarch64-unknown-linux-gnu-:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout repository
@@ -99,7 +137,7 @@ jobs:
             --volume "${PWD}:/build"
             --volume "/home/runner:/home/runner"
           install: |
-            apt-get update && apt-get install -y gnupg2 && apt-get install curl -y
+            apt-get update && apt-get install -y gnupg2 && apt-get install curl gcc g++ make -y
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
             source "$HOME/.cargo/env"
           run: |
